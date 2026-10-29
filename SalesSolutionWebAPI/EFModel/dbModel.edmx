@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="SalesRollDB_ZASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_LeaveInfo">
+          <Key>
+            <PropertyRef Name="LeaveId" />
+          </Key>
+          <Property Name="LeaveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LeaveTypeId" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Reason" Type="nvarchar(max)" />
+          <Property Name="EntryBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="EntryDate" Type="datetime" />
+          <Property Name="UpdateBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ApprovalStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApprovedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_LeaveTypeInfo">
+          <Key>
+            <PropertyRef Name="LeaveTypeId" />
+          </Key>
+          <Property Name="LeaveTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LeaveTypeName" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="SalesRollDB_ZASModelStoreContainer">
+          <EntitySet Name="tbl_LeaveInfo" EntityType="Self.tbl_LeaveInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_LeaveTypeInfo" EntityType="Self.tbl_LeaveTypeInfo" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SalesRollDB_ZASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_LeaveInfo">
+          <Key>
+            <PropertyRef Name="LeaveId" />
+          </Key>
+          <Property Name="LeaveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LeaveTypeId" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Reason" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EntryBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EntryDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_LeaveTypeInfo">
+          <Key>
+            <PropertyRef Name="LeaveTypeId" />
+          </Key>
+          <Property Name="LeaveTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LeaveTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="SalesRollDB_ZASEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_LeaveInfo" EntityType="Self.tbl_LeaveInfo" />
+          <EntitySet Name="tbl_LeaveTypeInfo" EntityType="Self.tbl_LeaveTypeInfo" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="SalesRollDB_ZASModelStoreContainer" CdmEntityContainer="SalesRollDB_ZASEntities">
+          <EntitySetMapping Name="tbl_LeaveInfo">
+            <EntityTypeMapping TypeName="SalesRollDB_ZASModel.tbl_LeaveInfo">
+              <MappingFragment StoreEntitySet="tbl_LeaveInfo">
+                <ScalarProperty Name="LeaveId" ColumnName="LeaveId" />
+                <ScalarProperty Name="LeaveTypeId" ColumnName="LeaveTypeId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="EntryBy" ColumnName="EntryBy" />
+                <ScalarProperty Name="EntryDate" ColumnName="EntryDate" />
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ApprovedDate" ColumnName="ApprovedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_LeaveTypeInfo">
+            <EntityTypeMapping TypeName="SalesRollDB_ZASModel.tbl_LeaveTypeInfo">
+              <MappingFragment StoreEntitySet="tbl_LeaveTypeInfo">
+                <ScalarProperty Name="LeaveTypeId" ColumnName="LeaveTypeId" />
+                <ScalarProperty Name="LeaveTypeName" ColumnName="LeaveTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
