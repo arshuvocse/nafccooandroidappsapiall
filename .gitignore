@@ -298,3 +298,7 @@ __pycache__/
 # should be stored in the .pubxml.user file.
 
 # End of https://www.gitignore.io/api/visualstudio
+
+# Graphify & local Claude overrides
+graphify-out/
+.claude/settings.local.json

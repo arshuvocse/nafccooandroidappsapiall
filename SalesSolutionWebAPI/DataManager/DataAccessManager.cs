@@ -30,8 +30,6 @@ namespace SalesSolutionWebAPI.DataManager
                 if (sqlConnection.State != ConnectionState.Open)
                 {
                     sqlConnection.Open();
-                    sqlTransaction = sqlConnection.BeginTransaction();
-
                 }
             }
             catch (SqlException sqlException)
@@ -48,6 +46,13 @@ namespace SalesSolutionWebAPI.DataManager
 
             }
             return returnValue;
+        }
+        private void BeginTransactionIfNeeded()
+        {
+            if (sqlTransaction == null)
+            {
+                sqlTransaction = sqlConnection.BeginTransaction();
+            }
         }
         public bool SqlConnectionClose(bool IsRollBack = false)
         {
@@ -72,7 +77,10 @@ namespace SalesSolutionWebAPI.DataManager
                         }
                         sqlTransaction.Dispose();
                     }
-                    sqlCommand.Dispose();
+                    if (sqlCommand != null)
+                    {
+                        sqlCommand.Dispose();
+                    }
                     sqlConnection.Close();
                 }
 
@@ -333,6 +341,7 @@ namespace SalesSolutionWebAPI.DataManager
             int primaryKey = 0;
             try
             {
+                BeginTransactionIfNeeded();
                 sqlCommand = new SqlCommand();
 
                 sqlCommand.Connection = sqlConnection;
@@ -388,6 +397,7 @@ namespace SalesSolutionWebAPI.DataManager
         {
             try
             {
+                BeginTransactionIfNeeded();
                 sqlCommand = new SqlCommand
                 {
                     Connection = sqlConnection,

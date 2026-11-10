@@ -1416,5 +1416,88 @@ namespace SalesSolutionWebAPI.Repository
             }
         }
 
+        // ---------- Customer Category Request ----------
+
+        private DataTable CatReqTable(string sp, params SqlParameter[] parameters)
+        {
+            try
+            {
+                accessManager.SqlConnectionOpen(DataBase.SalesDisDB);
+                return accessManager.GetDataTable(sp, parameters.ToList());
+            }
+            finally
+            {
+                accessManager.SqlConnectionClose();
+            }
+        }
+
+        public DataTable GetCategoryRequestSummary(int empId)
+        {
+            return CatReqTable("sp_Webapi_CatReq_GetSummary", new SqlParameter("@EmpId", empId));
+        }
+
+        public DataTable GetCategoryRequestCustomers(int empId)
+        {
+            return CatReqTable("sp_Webapi_CatReq_GetCustomers", new SqlParameter("@EmpId", empId));
+        }
+
+        public DataTable GetCategoryApprovalList(int empId, string status)
+        {
+            return CatReqTable("sp_Webapi_CatReq_GetApprovalList",
+                new SqlParameter("@EmpId", empId), new SqlParameter("@Status", status ?? "Pending"));
+        }
+
+        public DataTable SaveCategoryApproval(CategoryApprovalSave a)
+        {
+            return CatReqTable("sp_Webapi_CatReq_Approve",
+                new SqlParameter("@RequestId", a.RequestId), new SqlParameter("@EmpId", a.EmpId),
+                new SqlParameter("@Status", a.Status ?? ""), new SqlParameter("@Comments", (object)a.Comments ?? DBNull.Value));
+        }
+
+        public ResultInfo SaveCategoryRequest(CategoryRequestSave a)
+        {
+            var docs = new Dictionary<string, string>
+            {
+                { "ShopPhoto", a.ShopPhoto }, { "NID", a.NID }, { "TradeLicense", a.TradeLicense }, { "DrugLicense", a.DrugLicense }
+            };
+            if (docs.Values.Any(string.IsNullOrWhiteSpace))
+                return new ResultInfo { isValiCheck = true, Msd = "All 4 documents are required." };
+
+            ImagePath path = new AppPrimaryDAL().GetImagePath("CategoryRequest");
+            if (string.IsNullOrEmpty(path.ImagePathValue))
+                return new ResultInfo { isError = true, Msd = "Image path 'CategoryRequest' is not set up." };
+            Directory.CreateDirectory(path.ImagePathValue);
+
+            // Write files under a temp name before the insert, so a bad image never leaves a request without documents.
+            string tmp = Guid.NewGuid().ToString("N");
+            Func<string, string> tmpFile = key => Path.Combine(path.ImagePathValue, tmp + "-" + key + ".jpg");
+            try
+            {
+                foreach (var d in docs)
+                    File.WriteAllBytes(tmpFile(d.Key), Convert.FromBase64String(d.Value));
+
+                DataTable dt = CatReqTable("sp_Webapi_CatReq_Save",
+                    new SqlParameter("@EmpId", a.EmpId), new SqlParameter("@CustomerMasterId", a.CustomerMasterId),
+                    new SqlParameter("@ToCustomerTypeId", a.CustomerTypeId));
+                int requestId = Convert.ToInt32(dt.Rows[0]["RequestId"]);
+                string msg = dt.Rows[0]["Msg"].ToString();
+                if (requestId <= 0)
+                    return new ResultInfo { isValiCheck = true, Msd = msg };
+
+                foreach (var key in docs.Keys)
+                    File.Move(tmpFile(key), Path.Combine(path.ImagePathValue, path.ImagePreName + requestId + "-" + key + ".jpg"));
+                return new ResultInfo { isSuccess = true, Msd = msg };
+            }
+            catch (FormatException)
+            {
+                return new ResultInfo { isValiCheck = true, Msd = "Invalid image data." };
+            }
+            finally
+            {
+                foreach (var key in docs.Keys)
+                    if (File.Exists(tmpFile(key))) File.Delete(tmpFile(key));
+            }
+        }
+
     }
 }

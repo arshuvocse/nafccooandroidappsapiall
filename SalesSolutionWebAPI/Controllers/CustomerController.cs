@@ -97,5 +97,42 @@ namespace SalesSolutionWebAPI.Controllers
         {
             return Json(_aRepo.GetCustomerDueListDAL(empId, Month, Year));
         }
+
+        // ---------- Customer Category Request ----------
+
+        [HttpGet]
+        [Route("api/Customer/GetCategoryRequestSummary")]
+        public IHttpActionResult GetCategoryRequestSummary(int empId)
+        {
+            return Json(_aRepo.GetCategoryRequestSummary(empId));
+        }
+
+        [HttpGet]
+        [Route("api/Customer/GetCategoryRequestCustomers")]
+        public IHttpActionResult GetCategoryRequestCustomers(int empId)
+        {
+            return Json(_aRepo.GetCategoryRequestCustomers(empId));
+        }
+
+        [HttpPost]
+        [Route("api/Customer/SaveCategoryRequest")]
+        public IHttpActionResult SaveCategoryRequest(CategoryRequestSave aInfo)
+        {
+            return Json(_aRepo.SaveCategoryRequest(aInfo));
+        }
+
+        [HttpGet]
+        [Route("api/Customer/GetCategoryApprovalList")]
+        public IHttpActionResult GetCategoryApprovalList(int empId, string status)
+        {
+            return Json(_aRepo.GetCategoryApprovalList(empId, status));
+        }
+
+        [HttpPost]
+        [Route("api/Customer/SaveCategoryApproval")]
+        public IHttpActionResult SaveCategoryApproval(CategoryApprovalSave aInfo)
+        {
+            return Json(_aRepo.SaveCategoryApproval(aInfo));
+        }
     }
 }

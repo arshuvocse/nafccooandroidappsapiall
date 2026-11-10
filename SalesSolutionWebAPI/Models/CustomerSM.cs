@@ -343,8 +343,28 @@ namespace SalesSolutionWebAPI.Models
 
         public string Todate { get; set; }
 
-         
-         
+
+
         public List<CampaingDtls> CampaingDetails { get; set; }
+    }
+
+    public class CategoryRequestSave
+    {
+        public int EmpId { get; set; }
+        public int CustomerMasterId { get; set; }
+        public int CustomerTypeId { get; set; }
+        // base64 jpg, all four mandatory
+        public string ShopPhoto { get; set; }
+        public string NID { get; set; }
+        public string TradeLicense { get; set; }
+        public string DrugLicense { get; set; }
+    }
+
+    public class CategoryApprovalSave
+    {
+        public int RequestId { get; set; }
+        public int EmpId { get; set; }
+        public string Status { get; set; }
+        public string Comments { get; set; }
     }
 }
